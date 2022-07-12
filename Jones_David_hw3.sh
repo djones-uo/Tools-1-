@@ -108,9 +108,15 @@ echo "Mean frequency using floating point arithemetics = $float_mean"
 # One can type lazy_commit file1 file2 ... filen  commit_message
 # and file will be added , commited and pushed to remote master using one lazy_commit command.
 function lazy_commit() {
-  git add --all
-  git commit -m "lzy" 
-  git push
-    }
-
-lazy_commit
+  if [ $# -lt 2 ]
+  then
+    echo "Not enough parameters"
+    return
+  fi
+  message="${@:-1}"
+  length=$(($#-1))
+  files=${@:1:$length}
+  git add $files
+  git commit -m "$message"
+  git push origin main
+  }
